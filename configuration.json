@@ -1,0 +1,185 @@
+{
+  "Serilog": {
+    "MinimumLevel": "verbose"
+  },
+  "MigrationTools": {
+    "Version": "16.0",
+    "Endpoints": {
+      "Source": {
+        "EndpointType": "TfsTeamProjectEndpoint",
+        "Collection": "https://dev.azure.com/saumilshah91/",
+        "Project": "sourceproject",
+        "Authentication": {
+          "AuthenticationMode": "AccessToken",
+          "AccessToken": "xxxx"
+        },
+        "ReflectedWorkItemIdField": "Custom.ReflectedWorkItemId",
+        "LanguageMaps": {
+          "AreaPath": "Area",
+          "IterationPath": "Iteration"
+        }
+      },
+      "Target": {
+        "EndpointType": "TfsTeamProjectEndpoint",
+        "Collection": "https://dev.azure.com/saumilshah91/",
+        "Project": "destinationproject",
+        "Authentication": {
+          "AuthenticationMode": "AccessToken",
+          "AccessToken": "xxxx"
+        },
+        "ReflectedWorkItemIdField": "Custom.ReflectedWorkItemId",
+        "LanguageMaps": {
+          "AreaPath": "Area",
+          "IterationPath": "Iteration"
+        }
+      }
+    },
+    "Processors": [
+      {
+        "ProcessorType": "TfsWorkItemMigrationProcessor",
+        "Enabled": false,
+        "WIQLQuery": "SELECT [System.Id] FROM WorkItems WHERE [System.TeamProject] = @TeamProject AND [System.WorkItemType] in ('User Story', 'Bug', 'Epic', 'Feature', 'Issue', 'Task') ORDER BY [System.ChangedDate] desc",
+        "WorkItemCreateRetryLimit": 5,
+        "FilterWorkItemsThatAlreadyExistInTarget": false,
+        "SourceName": "Source",
+        "TargetName": "Target",
+        "LogLevel": "Verbose",
+        "ReplayRevisions": true,
+        "AttachRevisionHistory": true,
+        "GenerateMigrationComment": true,
+        "UpdateCreatedDate": true,
+        "UpdateCreatedBy": true,
+        "FixHtmlAttachmentLinks": true,
+        "MaxGracefulFailures": 0,
+        "PauseAfterEachWorkItem": false,
+        "SkipRevisionWithInvalidAreaPath": false,
+        "SkipRevisionWithInvalidIterationPath": false,
+        "EnsureTargetWorkItemCreated": false
+      },
+      {
+        "ProcessorType": "TfsTestVariablesMigrationProcessor",
+        "Enabled": true,
+        "Processor": "TestVariablesMigrationContext",
+        "SourceName": "Source",
+        "TargetName": "Target"
+      },
+      {
+        "ProcessorType": "TfsTestConfigurationsMigrationProcessor",
+        "Enabled": true,
+        "SourceName": "Source",
+        "TargetName": "Target"
+      },
+      {
+        "ProcessorType": "TfsTestPlansAndSuitesMigrationProcessor",
+        "Enabled": true,
+        "OnlyElementsWithTag": "",
+        "TestPlanQuery": "",
+        "RemoveAllLinks": false,
+        "MigrationDelay": 0,
+        "RemoveInvalidTestSuiteLinks": false,
+        "FilterCompleted": false,
+        "SourceName": "Source",
+        "TargetName": "Target"
+      }
+    ],
+    "CommonTools": {
+      "TfsGitRepositoryTool": {
+        "Enabled": true,
+        "Mappings": {
+          "RepoInSource": "RepoInTarget"
+        }
+      },
+      "FieldMappingTool": {
+        "Enabled": true,
+        "FieldMaps": [
+          {
+            "FieldMapType": "FieldValueMap",
+            "ApplyTo": [
+              "User Story"
+            ],
+            "sourceField": "System.State",
+            "targetField": "System.State",
+            "valueMapping": {
+              "Active": "Approved"
+            }
+          }
+        ],
+        "WorkItemTypeMapping": {
+          "User Story": "Product Backlog Item"
+        }
+      },
+      "TfsNodeStructureTool": {
+        "Areas": {
+          "Filters": [],
+          "Mappings": {
+            "^migrationSource1([\\\\]?.*)$": "MigrationTest5$1"
+          }
+        },
+        "Enabled": true,
+        "Iterations": {
+          "Filters": [],
+          "Mappings": {
+            "^migrationSource1([\\\\]?.*)$": "MigrationTest5$1"
+          }
+        },
+        "ReplicateAllExistingNodes": true,
+        "ShouldCreateMissingRevisionPaths": true
+      },
+      "TfsTeamSettingsTool": {
+        "Enabled": true,
+        "MigrateTeamSettings": true,
+        "UpdateTeamSettings": true,
+        "MigrateTeamCapacities": true
+      },
+      "TfsWorkItemLinkTool": {
+        "Enabled": true,
+        "FilterIfLinkCountMatches": true,
+        "SaveAfterEachLinkIsAdded": false
+      },
+      "TfsRevisionManagerTool": {
+        "Enabled": true,
+        "ReplayRevisions": true,
+        "MaxRevisions": 0
+      },
+      "TfsAttachmentTool": {
+        "RefName": "TfsAttachmentTool",
+        "Enabled": true,
+        "ExportBasePath": "c:\\temp\\WorkItemAttachmentExport",
+        "MaxAttachmentSize": 480000000
+      },
+      "StringManipulatorTool": {
+        "Enabled": true,
+        "MaxStringLength": 1000000,
+        "Manipulators": [
+          {
+            "$type": "RegexStringManipulator",
+            "Enabled": true,
+            "Pattern": "[^( -~)\n\r\t]+",
+            "Replacement": "",
+            "Description": "Remove invalid characters from the end of the string"
+          }
+        ]
+      },
+      "WorkItemTypeMappingTool": {
+        "Enabled": true,
+        "Mappings": {
+          "User Story": "Product Backlog Item",
+          "Bug": "Bug",
+          "Epic": "Epic",
+          "Feature": "Feature",
+          "Issue": "Impediment",
+          "Task": "Task",
+          "Test Case": "Test Case",
+          "Test Plan": "Test Plan",
+          "Test Suite": "Test Suite"
+        }
+      },
+      "TfsWorkItemEmbededLinkTool": {
+        "Enabled": true
+      },
+      "TfsEmbededImagesTool": {
+        "Enabled": true
+      }
+    }
+  }
+}
