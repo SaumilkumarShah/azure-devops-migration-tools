@@ -1,6 +1,99 @@
 # Migration Tools Configuration
 
-This repository contains configuration files for setting up and running migration tasks using the Migration Tools from [nkdAgility](https://nkdagility.com/learn/azure-devops-migration-tools/). For more details, refer to the [Azure DevOps Migration Tools documentation](https://nkdagility.com/learn/azure-devops-migration-tools/).
+This documentation contains configuration files for setting up and running migration tasks using the Migration Tools from [nkdAgility](https://nkdagility.com/learn/azure-devops-migration-tools/). For more details, refer to the [Azure DevOps Migration Tools documentation](https://nkdagility.com/learn/azure-devops-migration-tools/).
+
+## Components That Can Be Migrated
+
+Using the Migration Tools, you can migrate the following components from one Azure DevOps organization to another:
+
+1. **Work Items**:
+    - User Stories
+    - Bugs
+    - Epics
+    - Features
+    - Issues
+    - Tasks
+    - Test Cases
+    - Test Plans
+    - Test Suites
+
+3. **Pipelines**:
+    - Build Pipelines
+    - Release Pipelines
+
+4. **Service Connections**:
+    - Service connections used in pipelines
+
+5. **Task Groups**:
+    - Task groups used in pipelines
+
+6. **Variable Groups**:
+    - Variable groups used in pipelines
+
+7. **Team Settings**:
+    - Team configurations and settings
+    - Team capacities
+
+8. **Area and Iteration Paths**:
+    - Area paths
+    - Iteration paths
+
+9. **Work Item Links**:
+    - Links between work items
+
+10. **Attachments**:
+     - Work item attachments
+
+11. **Embedded Links and Images**:
+     - Embedded links and images in work items
+
+    ## Installation and Running Commands
+
+    ### Installing the Utility via Chocolatey
+
+    To install the Migration Tools utility using Chocolatey, follow these steps:
+
+    1. **Install Chocolatey**:
+        If you haven't installed Chocolatey yet, you can do so by running the following command in an elevated PowerShell prompt:
+
+        ```powershell
+        Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://community.chocolatey.org/install.ps1'))
+        ```
+
+    2. **Install Migration Tools**:
+        Once Chocolatey is installed, you can install the Migration Tools utility by running the following command:
+
+        ```powershell
+        choco install vsts-sync-migrator --version 16.1.0-preview0003
+        ```
+
+    ### Running Commands Locally
+
+    After installing the Migration Tools utility, you can run the following commands locally to perform migration tasks:
+
+    1. **Navigate to the Directory**:
+        Open a command prompt or PowerShell window and navigate to the directory containing your configuration files:
+
+        ```powershell
+        cd /C:/tools/MigrationTools/
+        ```
+
+    2. **Run the Migration Command**:
+        Use the Migration Tools utility to run the migration command with the appropriate configuration file. For example, to run the migration using `configuration.json`, use the following command:
+
+        ```powershell
+        devopsmigration.exe.exe execute --config configuration.json
+        ```
+
+        Similarly, to run the migration using `configuration-pipeline.json`, use the following command:
+
+        ```powershell
+        migration-tools.exe execute --config configuration-pipeline.json
+        ```
+
+    These steps will help you install the Migration Tools utility via Chocolatey and run the necessary commands locally to perform your migration tasks.
+
+These components can be configured and migrated using the provided configuration files (`configuration.json` and `configuration-pipeline.json`).
 
 ## Configuration Files
 
