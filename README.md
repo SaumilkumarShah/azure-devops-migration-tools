@@ -82,13 +82,13 @@ Using the Migration Tools, you can migrate the following components from one Azu
         Use the Migration Tools utility to run the migration command with the appropriate configuration file. For example, to run the migration using `configuration.json`, use the following command:
 
         ```powershell
-        devopsmigration.exe.exe execute --config configuration.json
+        devopsmigration.exe execute --config configuration.json
         ```
 
         Similarly, to run the migration using `configuration-pipeline.json`, use the following command:
 
         ```powershell
-        migration-tools.exe execute --config configuration-pipeline.json
+        devopsmigration.exe execute --config configuration-pipeline.json
         ```
 
     These steps will help you install the Migration Tools utility via Chocolatey and run the necessary commands locally to perform your migration tasks.
